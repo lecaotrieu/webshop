@@ -1,7 +1,6 @@
 package com.shop.webshop.core.entity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long id;
 
     @Column(name = "productcode")
     private String productCode;
@@ -25,13 +24,13 @@ public class ProductEntity {
     private String createdBy;
 
     @Column(name = "modifieddate")
-    private String modifiedDate;
+    private Date modifiedDate;
 
     @Column(name = "modifiedby")
     private String modifiedBy;
 
     @Column
-    private BigDecimal price;
+    private Long price;
 
     @Column
     private Integer sale;
@@ -45,16 +44,11 @@ public class ProductEntity {
     @Column
     private String store;
 
-    @OneToMany(mappedBy = "cartProduct", fetch = FetchType.LAZY)
+    @Column
+    private Integer status;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<CartProductEntity> cartProducts;
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
 
     public String getProductCode() {
         return productCode;
@@ -88,14 +82,6 @@ public class ProductEntity {
         this.createdBy = createdBy;
     }
 
-    public String getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(String modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
     public String getModifiedBy() {
         return modifiedBy;
     }
@@ -104,11 +90,11 @@ public class ProductEntity {
         this.modifiedBy = modifiedBy;
     }
 
-    public BigDecimal getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -150,5 +136,29 @@ public class ProductEntity {
 
     public void setCartProducts(List<CartProductEntity> cartProducts) {
         this.cartProducts = cartProducts;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

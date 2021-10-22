@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/admin :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit phẩm</title>
+</head>
+<body>
+<div class="breadcrumbs" id="breadcrumbs">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a th:href="@{/admin/home-page}">
+                    <i class="fa fa-home"></i>
+                    Admin page
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" th:if="${product.id == null}">Thêm sản phẩm</li>
+            <li class="breadcrumb-item active" aria-current="page" th:if="${product.id != null}"
+                th:text="${product.productName}"></li>
+        </ol>
+    </nav>
+</div>
+<div class="alert alert-block alert-success" th:if="${param.update_success}">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    Update sản phẩm thành công!
+</div>
+<div class="alert alert-block alert-danger" th:if="${param.error}">
+    <button type="button" class="close" data-dismiss="alert">
+        <i class="ace-icon fa fa-times"></i>
+    </button>
+    Có lỗi xãy ra!
+</div>
+<form th:action="@{/admin/product/edit}" method="post" id="form-product" class="row" enctype="multipart/form-data">
+    <div class="col-6">
+        <div class="form-group">
+            <label for="ip-productName">Tên sản phẩm</label>
+            <input type="text" class="form-control" id="ip-productName" th:field="${product.productName}"
+                   placeholder="Nhập tên sản phẩm" required>
+        </div>
+        <div class="form-group">
+            <label for="ip-price">Giá</label>
+            <input type="number" class="form-control" id="ip-price" th:field="${product.price}" placeholder="Giá"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="ip-sale">Giảm giá (%)</label>
+            <input type="number" class="form-control" id="ip-sale" th:field="${product.sale}" placeholder="Giảm giá"
+                   pattern="(100|([0-9][0-9]))">
+        </div>
+        <div class="form-group">
+            <label for="ip-store">Cửa hàng</label>
+            <input type="text" class="form-control" id="ip-store" placeholder="Cửa hàng" th:field="${product.store}"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="ip-status">Trạng thái</label>
+            <select class="form-control" id="ip-status" th:field="${product.status}">
+                <option value="1">Hoạt động</option>
+                <option value="0">Không hoạt động</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ip-description">Miêu tả</label>
+            <textarea class="form-control" id="ip-description" th:field="${product.description}" rows="5">
+
+            </textarea>
+        </div>
+        <input type="hidden" th:field="${product.id}">
+    </div>
+    <div class="col-6">
+        <input type="file" name="fileImage" id="ip-image" accept="image/*"
+               onchange="readURL(this,'image-product')">
+        <img class="d-block product-image" th:src="${product.imageUrl}" alt="Card image cap" id="image-product"
+             th:if="${product.id !=null}">
+        <img class="d-block product-image" th:src="@{/template/image/no-image.png}" alt="Card image cap" id="image-product"
+             th:if="${product.id ==null}">
+    </div>
+    <input type="hidden" th:field="${product.image}">
+    <button type="submit" class="btn btn-primary" id="btn-submit">Đăng</button>
+</form>
+</body>
+</html>

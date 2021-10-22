@@ -10,8 +10,10 @@ CREATE TABLE user(
                      username VARCHAR(150) NOT NULL PRIMARY KEY,
                      password VARCHAR(250) NOT NULL,
                      fullname NVARCHAR(250) NOT NULL,
+                     email VARCHAR(250),
+                     phone VARCHAR(10),
                      createddate DATETIME,
-                     createby VARCHAR(150),
+                     createdby VARCHAR(150),
                      modifieddate DATETIME,
                      modifiedby VARCHAR(150),
                      status INT NOT NULL,
@@ -19,21 +21,21 @@ CREATE TABLE user(
                      CONSTRAINT fk_user_role FOREIGN KEY (rolecode) REFERENCES role(rolecode)
 );
 
-INSERT INTO role VALUES('user', 'Người dùng');
-INSERT INTO role VALUES('admin', 'Quản lý');
+INSERT INTO role VALUES('USER', 'Người dùng');
+INSERT INTO role VALUES('ADMIN', 'Quản lý');
 
-INSERT INTO user VALUES('trieulc', '123456', 'le cao trieu', NULL, NULL, NULL, NULL,'1','user');
-INSERT INTO user VALUES('admin', '123456', 'admin', NULL,NULL , NULL, NULL,'1','admin');
+INSERT INTO user VALUES('trieulc', '$2a$10$w5/0AKoVodPvmGnqWfTMFeHaZQhEYNDXuiifmY58v6O43jhdF7a6i', 'le cao trieu', NULL, NULL, NULL, NULL, NULL, NULL,'1','USER');
+INSERT INTO user VALUES('admin', '$2a$10$w5/0AKoVodPvmGnqWfTMFeHaZQhEYNDXuiifmY58v6O43jhdF7a6i', 'admin', NULL,NULL , NULL, NULL, NULL, NULL,'1','ADMIN');
 
 CREATE TABLE product(
                         productId BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         productcode VARCHAR(255) NOT NULL,
                         productname NVARCHAR(255) NOT NULL,
                         createddate DATETIME,
-                        createby VARCHAR(150),
+                        createdby VARCHAR(150),
                         modifieddate DATETIME,
                         modifiedby VARCHAR(150),
-                        price DECIMAL(15,2),
+                        price BIGINT,
                         sale INT,
                         image varchar(255),
                         description TEXT,
@@ -42,9 +44,9 @@ CREATE TABLE product(
 
 CREATE TABLE cart(
                      cartid BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                     username VARCHAR(150) NOT NULL,
+                     username VARCHAR(150),
                      createddate DATETIME,
-                     createby VARCHAR(150),
+                     createdby VARCHAR(150),
                      modifieddate DATETIME,
                      modifiedby VARCHAR(150),
                      status INT NOT NULL,

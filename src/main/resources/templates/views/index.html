@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/web :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+</head>
+<body>
+<div class="row product-list">
+    <th:block th:each="product: ${products}">
+        <div class="col-3 product-item">
+            <div class="image-product">
+                <img th:src="@{${product.imageUrl}}" alt="">
+            </div>
+            <div class="detail-product">
+                <a class="product-name" th:href="@{'/product/detail/' + ${product.id}}" th:text="${product.productName}" style="color: #00cdfb"></a>
+                <p class="product-price" th:text="${'Giá:' + product.price + ' vnđ - '+ product.sale + '%'}"></p>
+                <p class="product-sale" th:text="${'Sale of:' + product.saleOf +' vnđ'}"></p>
+            </div>
+            <div class="product-action">
+                <button class="btn btn-sm btn-warning">Mua</button>
+                <button class="btn btn-sm btn-primary" th:onclick="addToCart([[${product.id}]])">Thêm vào giỏ</button>
+            </div>
+        </div>
+    </th:block>
+</div>
+<div class="row">
+    <div class="dataTables_paginate paging_simple_numbers" id="dtBasicExample_paginate">
+        <ul id="pagination" class="pagination-sm"></ul>
+        <input type="hidden" th:value="${common.page}" name="page" id="page">
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var totalPages = /*[[${common.totalPage}]]*/ null;
+    var starPage = /*[[${common.page}]]*/ null;
+    /*]]>*/
+    var visiblePages = 5
+
+    $(function () {
+        var obj = $('#pagination').twbsPagination({
+            totalPages: totalPages,
+            startPage: starPage,
+            visiblePages: visiblePages,
+            onPageClick: function (event, page) {
+                if (page != starPage) {
+                    var url = '/home-page/';
+                    $("#page").val(page);
+                    $("#form-search").attr("action", url + page);
+                    $("#form-search").submit();
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/web :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.productName}"></title>
+    <link rel="stylesheet" th:href="@{/template/plusminusbutton/style.css}">
+</head>
+<body>
+<div class="row">
+    <!--Section: Block Content-->
+    <section class="mb-5">
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div id="mdb-lightbox-ui"></div>
+                <div class="mdb-lightbox">
+                    <div class="row product-gallery mx-1">
+                        <div class="col-12 mb-0">
+                            <figure class="view overlay rounded z-depth-1 main-img">
+                                <a th:href="@{${product.imageUrl}}"
+                                   data-size="710x823">
+                                    <img th:src="@{${product.imageUrl}}"
+                                         class="img-fluid z-depth-1">
+                                </a>
+                            </figure>
+                        </div>
+                        <div class="col-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5 th:text="${product.productName}"></h5>
+                <p><span class="mr-1"><strong th:text="${product.price + ' vnđ'}"></strong></span></p>
+                <p class="pt-1" th:utext="${product.description}"></p>
+                <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tbody>
+                        <tr>
+                            <th class="pl-0 w-25" scope="row"><strong>Sale of</strong></th>
+                            <td th:text="${product.getSaleOf()} + ' vnđ'"></td>
+                        </tr>
+                        <tr>
+                            <th class="pl-0 w-25" scope="row"><strong>Store</strong></th>
+                            <td th:text="${product.store}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <div class="table-responsive mb-2">
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <td class="pl-0 pb-0 w-25">Quantity</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-0">
+                                <div class="quantity buttons_added">
+                                    <input type="button" value="-" class="minus"><input type="number" step="1" min="1"
+                                                                                        max="" name="quantity" value="1"
+                                                                                        title="Qty"
+                                                                                        class="input-text qty text"
+                                                                                        size="4" pattern=""
+                                                                                        inputmode="" id="ip-quantity"><input
+                                        type="button" value="+" class="plus">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-primary btn-md mr-1 mb-2">Mua ngay</button>
+                <button type="button" class="btn btn-light btn-md mr-1 mb-2" th:onclick="addToCart([[${product.id}]])"><i
+                        class="fas fa-shopping-cart pr-2"></i>Thêm vào giỏ hàng
+                </button>
+            </div>
+        </div>
+
+    </section>
+    <!--Section: Block Content-->
+</div>
+<script>
+    $(document).ready(function () {
+        // MDB Lightbox Init
+        $(function () {
+            $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+        });
+    });
+</script>
+</body>
+</html>

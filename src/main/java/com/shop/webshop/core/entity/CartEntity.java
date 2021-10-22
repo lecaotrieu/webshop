@@ -9,7 +9,7 @@ import java.util.List;
 public class CartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
+    private Long id;
 
     @Column(name = "createddate")
     private Date createdDate;
@@ -18,7 +18,7 @@ public class CartEntity {
     private String createdBy;
 
     @Column(name = "modifieddate")
-    private String modifiedDate;
+    private Date modifiedDate;
 
     @Column(name = "modifiedby")
     private String modifiedBy;
@@ -30,16 +30,8 @@ public class CartEntity {
     @JoinColumn(name = "username")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<CartProductEntity> cartProducts;
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
-    }
 
     public Date getCreatedDate() {
         return createdDate;
@@ -57,11 +49,11 @@ public class CartEntity {
         this.createdBy = createdBy;
     }
 
-    public String getModifiedDate() {
+    public Date getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(String modifiedDate) {
+    public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
@@ -95,5 +87,13 @@ public class CartEntity {
 
     public void setCartProducts(List<CartProductEntity> cartProducts) {
         this.cartProducts = cartProducts;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

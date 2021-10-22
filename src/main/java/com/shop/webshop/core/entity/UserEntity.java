@@ -14,6 +14,15 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "fullname")
+    private String fullName;
+
+    @Column
+    private String email;
+
+    @Column
+    private String phone;
+
     @Column(name = "createddate")
     private Date createdDate;
 
@@ -21,7 +30,7 @@ public class UserEntity {
     private String createdBy;
 
     @Column(name = "modifieddate")
-    private String modifiedDate;
+    private Date modifiedDate;
 
     @Column(name = "modifiedby")
     private String modifiedBy;
@@ -68,11 +77,11 @@ public class UserEntity {
         this.createdBy = createdBy;
     }
 
-    public String getModifiedDate() {
+    public Date getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(String modifiedDate) {
+    public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
@@ -106,5 +115,29 @@ public class UserEntity {
 
     public void setCarts(List<CartEntity> carts) {
         this.carts = carts;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -14,7 +14,7 @@ public class CartProductEntity {
     private Integer quantity;
 
     @Column(name = "totalmoney")
-    private BigDecimal totalMoney;
+    private Long totalMoney;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productid")
@@ -40,13 +40,6 @@ public class CartProductEntity {
         this.quantity = quantity;
     }
 
-    public BigDecimal getTotalMoney() {
-        return totalMoney;
-    }
-
-    public void setTotalMoney(BigDecimal totalMoney) {
-        this.totalMoney = totalMoney;
-    }
 
     public ProductEntity getProduct() {
         return product;
@@ -62,5 +55,12 @@ public class CartProductEntity {
 
     public void setCart(CartEntity cart) {
         this.cart = cart;
+    }
+
+    public Long getTotalMoney() {
+        return totalMoney;
+    }
+    public void setTotalMoney(Long totalMoney) {
+        this.totalMoney = totalMoney;
     }
 }

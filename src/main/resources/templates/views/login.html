@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/web :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+</head>
+<body>
+<div class="row">
+    <div class="form-login col-6 mx-auto">
+        <h3 style="text-align: center">Đăng nhập</h3>
+        <div class="alert alert-danger" role="alert" th:if="${param.register_success != null}">
+            Đăng ký tài khoản thành công !
+        </div>
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="ip-username">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="ip-username" name="j_username"
+                       placeholder="Nhập tên đăng nhập">
+            </div>
+            <div class="form-group">
+                <label for="ip-password">Mật khẩu</label>
+                <input type="password" name="j_password" class="form-control" id="ip-password" placeholder="Password">
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="ip-remember-me" name="remember-me">
+                <label class="form-check-label" for="ip-remember-me">Nhớ mật khẩu</label>
+            </div>
+            <button class="btn btn-primary">Đăng nhâp</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
