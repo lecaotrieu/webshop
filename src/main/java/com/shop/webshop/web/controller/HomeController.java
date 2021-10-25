@@ -38,7 +38,9 @@ public class HomeController {
     public String login(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         if (referrer != null) {
-            request.getSession().setAttribute("url_prior_login", referrer);
+            if(!referrer.contains("login") && !referrer.contains("register")){
+                request.getSession().setAttribute("url_prior_login", referrer);
+            }
         }
         return "views/login";
     }
