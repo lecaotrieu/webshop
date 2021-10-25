@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 
@@ -22,6 +23,7 @@ public class UserService implements IUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public void registerUser(UserDTO userDTO) throws Exception {
         if (!checkUser(userDTO)) {

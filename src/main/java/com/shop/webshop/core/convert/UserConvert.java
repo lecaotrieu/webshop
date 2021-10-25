@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 public class UserConvert {
     public static UserDTO toDTO(UserEntity entity) {
+        if (entity == null) return null;
         UserDTO dto = new UserDTO();
         BeanUtils.copyProperties(entity, dto);
         if (entity.getRole() != null) {
@@ -15,6 +16,7 @@ public class UserConvert {
     }
 
     public static UserEntity toEntity(UserDTO dto) {
+        if (dto == null) return null;
         UserEntity entity = new UserEntity();
         BeanUtils.copyProperties(dto, entity);
         if (dto.getRole() != null) {

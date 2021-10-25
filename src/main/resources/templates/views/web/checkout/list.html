@@ -1,0 +1,169 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/web :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách đã mua</title>
+    <link rel="stylesheet" th:href="@{/template/plusminusbutton/style.css}">
+    <style>
+        .ip-limit select {
+            width: 53px;
+            margin: 9px 0;
+        }
+
+        .ip-limit p {
+            height: 30px;
+            margin: 9px 0;
+            padding: 5px;
+        }
+
+        .ip-limit {
+            display: flex;
+        }
+
+        .ip-search button {
+            width: 125px;
+        }
+
+        .ip-search input {
+            margin: 8px;
+        }
+
+        .ip-search {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <form th:action="@{/user/checkout/list}" method="get" id="formUrl" class="col-12">
+        <div id="dtBasicExample_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="row">
+                <div class="ip-limit col-md-6">
+                    <p>Hiển thị</p>
+                    <select th:field="${common.limit}"
+                            class="custom-select custom-select-sm form-control form-control-sm" id="select-show">
+                        <option th:each="i : ${#numbers.sequence(1,100,1)}" th:value="${i}" th:text="${i}"></option>
+                    </select>
+                    <p>đã thanh toán</p>
+                </div>
+                <div class="ip-search col-md-6">
+                    <input type="search" class="form-control form-control-sm col-8" placeholder="Tìm kiếm"
+                           aria-controls="dtBasicExample" th:value="${common.search}" name="search">
+                    <button class="btn btn-primary btn-sm">Tìm kiếm</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th class="th-sm table-sort" sortBy="id">ID</th>
+                            <th class="th-sm table-sort" sortBy="createdDate">Ngày mua</th>
+                            <th class="th-sm table-sort" sortBy="money">Tổng tiền</th>
+                            <th class="th-sm table-sort" sortBy="address">Địa chỉ</th>
+                            <th class="th-sm table-sort" sortBy="phone">Số điện thoại</th>
+                            <th class="th-sm table-sort" sortBy="user.userName">Người mua</th>
+                            <th class="th-sm">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="checkout: ${checkouts}">
+                            <tr>
+                                <td th:text="${checkout.id}"></td>
+                                <td th:text="${checkout.createdDate}"></td>
+                                <td th:text="${checkout.money}"></td>
+                                <td th:text="${checkout.address}"></td>
+                                <td th:text="${checkout.phone}"></td>
+                                <td th:text="${checkout.user.userName}"></td>
+                                <td>
+                                    <a th:href="@{'/user/checkout/detail-' + ${checkout.id}}" class="btn btn-sm btn-success">
+                                        Xem chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th class="th-sm" sortBy="id">ID</th>
+                            <th class="th-sm" sortBy="createdDate">Ngày mua</th>
+                            <th class="th-sm" sortBy="money">Tổng tiền</th>
+                            <th class="th-sm" sortBy="address">Địa chỉ</th>
+                            <th class="th-sm" sortBy="phone">Số điện thoại</th>
+                            <th class="th-sm" sortBy="user.userName">Người mua</th>
+                            <th class="th-sm">Action</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="dtBasicExample_info" role="status" aria-live="polite"><p
+                            th:text="${'Total : ' + common.totalItems}"></p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="dtBasicExample_paginate">
+                        <ul id="pagination" class="pagination-sm"></ul>
+                        <input type="hidden" th:value="${common.page}" name="page" id="page">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <input type="hidden" id="sortDirec" th:field="${common.sortDesc}">
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var totalPages = /*[[${common.totalPage}]]*/ null;
+    var starPage = /*[[${common.page}]]*/ null;
+    /*]]>*/
+    var visiblePages = 5
+    $(document).ready(function () {
+
+    });
+    $('#formUrl select').change(function () {
+        $('#formUrl').submit();
+    })
+    $('.table-sort').click(function () {
+        var sortBy = $(this).attr("sortBy");
+        var sortDirec = $('#sortDirec').val();
+        sortDirec = sortDirec == 1 ? 0 : 1;
+        $('<input>').attr({
+            type: 'hidden',
+            value: sortBy,
+            name: 'sortBy'
+        }).appendTo('#formUrl');
+        $('<input>').attr({
+            type: 'hidden',
+            value: sortDirec,
+            name: 'sortDesc'
+        }).appendTo('#formUrl');
+        $('#formUrl').submit();
+    });
+
+
+    $('#select-show').change(function () {
+        $('#formUrl').submit();
+    })
+    $(function () {
+        var obj = $('#pagination').twbsPagination({
+            totalPages: totalPages,
+            startPage: starPage,
+            visiblePages: visiblePages,
+            onPageClick: function (event, page) {
+                if (page != starPage) {
+                    $("#page").val(page);
+                    $("#formUrl").submit();
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

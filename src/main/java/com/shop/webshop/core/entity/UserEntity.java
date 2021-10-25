@@ -45,6 +45,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<CartEntity> carts;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<CheckoutEntity> checkouts;
+
     public String getUserName() {
         return userName;
     }
@@ -139,5 +142,13 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<CheckoutEntity> getCheckouts() {
+        return checkouts;
+    }
+
+    public void setCheckouts(List<CheckoutEntity> checkouts) {
+        this.checkouts = checkouts;
     }
 }

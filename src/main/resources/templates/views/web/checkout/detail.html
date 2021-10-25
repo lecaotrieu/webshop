@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/web :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán</title>
+    <link rel="stylesheet" th:href="@{/template/plusminusbutton/style.css}">
+</head>
+<body>
+<div class="row">
+    <!--Grid column-->
+    <div class="col-lg-8">
+        <!-- Card -->
+        <div class="mb-3">
+            <div class="pt-4 wish-list">
+                <h5 class="mb-4">Thông tin sản phẩm đã mua</h5>
+                <div th:each="productDetail: ${checkout.cart.cartProducts}" th:id="${'cartProduct-' + productDetail.id}">
+                    <div class="row mb-4">
+                        <div class="col-md-5 col-lg-3 col-xl-3">
+                            <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                                <img class="img-fluid w-100"
+                                     th:src="@{${productDetail.product.getImageUrl()}}" alt="Sample">
+                                <a th:href="@{'/product/detail/'+${productDetail.product.id}}">
+                                    <div class="mask">
+                                        <img class="img-fluid w-100"
+                                             th:src="@{${productDetail.product.getImageUrl()}}">
+                                        <div class="mask rgba-black-slight"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-lg-9 col-xl-9">
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <a th:href="@{'/product/detail/'+${productDetail.product.id}}">
+                                            <h5 th:text="${productDetail.product.productName}"></h5>
+                                        </a>
+                                        <p class="mb-3 text-muted text-uppercase small"
+                                           th:text="${'Giá: '+ productDetail.product.price} + ' vnđ'"></p>
+                                        <p class="mb-3 text-muted text-uppercase small"
+                                           th:text="${'SHOP: '+ productDetail.product.store}"></p>
+                                    </div>
+                                    <div>
+                                        <div class="quantity buttons_added">
+                                            <p th:text="${'Số lượng: ' + productDetail.quantity}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        Tổng tiền
+                                    </div>
+                                    <p class="mb-0"><span><strong class="product-total-money"
+                                                                  th:text="${productDetail.totalMoney}"></strong> vnđ</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                </div>
+            </div>
+        </div>
+        <!-- Card -->
+    </div>
+    <!--Grid column-->
+    <!--Grid column-->
+    <div class="col-lg-4">
+        <!-- Card -->
+        <div class="mb-3">
+            <div class="pt-4">
+                <h5 class="mb-3">Tổng giá sản phẩm</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                        <div>
+                            <strong>Tổng giá</strong>
+                            <strong>
+                                <p class="mb-0"></p>
+                            </strong>
+                        </div>
+                        <span><strong th:text="${checkout.money}"></strong> vnđ</span>
+                    </li>
+                    <hr>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <strong>Địa chỉ</strong>
+                            <strong>
+                                <p class="mb-0"></p>
+                            </strong>
+                        </div>
+                        <span><strong th:text="${checkout.address}"></strong></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <strong>Số điện thoại</strong>
+                            <strong>
+                                <p class="mb-0"></p>
+                            </strong>
+                        </div>
+                        <span><strong th:text="${checkout.phone}"></strong></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <strong>Thời gian mua</strong>
+                            <strong>
+                                <p class="mb-0"></p>
+                            </strong>
+                        </div>
+                        <span><strong th:text="${checkout.createdDate}"></strong></span>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <!-- Card -->
+    </div>
+    <!--Grid column-->
+</div>
+</body>
+</html>

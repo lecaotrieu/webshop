@@ -33,6 +33,9 @@ public class CartEntity {
     @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<CartProductEntity> cartProducts;
 
+    @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER)
+    private CheckoutEntity checkout;
+
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -95,5 +98,13 @@ public class CartEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public CheckoutEntity getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(CheckoutEntity checkout) {
+        this.checkout = checkout;
     }
 }

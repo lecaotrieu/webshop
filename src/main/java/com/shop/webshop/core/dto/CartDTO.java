@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CartDTO {
-    private Long cartId;
+    private Long id;
     private Date createdDate;
     private String createdBy;
     private Date modifiedDate;
@@ -12,16 +12,9 @@ public class CartDTO {
     private Integer status;
     private UserDTO user;
     private List<CartProductDTO> cartProducts;
+    private CheckoutDTO checkout;
 
     public CartDTO() {
-    }
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
     }
 
     public Date getCreatedDate() {
@@ -78,5 +71,21 @@ public class CartDTO {
 
     public void setCartProducts(List<CartProductDTO> cartProducts) {
         this.cartProducts = cartProducts;
+    }
+
+    public CheckoutDTO getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(CheckoutDTO checkout) {
+        this.checkout = checkout;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

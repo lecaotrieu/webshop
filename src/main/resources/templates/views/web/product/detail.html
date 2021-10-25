@@ -64,7 +64,8 @@
                                                                                         title="Qty"
                                                                                         class="input-text qty text"
                                                                                         size="4" pattern=""
-                                                                                        inputmode="" id="ip-quantity"><input
+                                                                                        inputmode=""
+                                                                                        id="ip-quantity"><input
                                         type="button" value="+" class="plus">
                                 </div>
                             </td>
@@ -72,13 +73,13 @@
                         </tbody>
                     </table>
                 </div>
-                <button type="button" class="btn btn-primary btn-md mr-1 mb-2">Mua ngay</button>
-                <button type="button" class="btn btn-light btn-md mr-1 mb-2" th:onclick="addToCart([[${product.id}]])"><i
-                        class="fas fa-shopping-cart pr-2"></i>Thêm vào giỏ hàng
+                <a type="button" class="btn btn-primary btn-md mr-1 mb-2" th:onclick="buyNow([[${product.id}]])">Mua ngay</a>
+                <button type="button" class="btn btn-light btn-md mr-1 mb-2" th:onclick="addToCart([[${product.id}]])">
+                    <i
+                            class="fas fa-shopping-cart pr-2"></i>Thêm vào giỏ hàng
                 </button>
             </div>
         </div>
-
     </section>
     <!--Section: Block Content-->
 </div>
@@ -89,6 +90,10 @@
             $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
         });
     });
+
+    function buyNow(id) {
+        window.location.href = "/user/checkout/p-" + id + "?quantity=" + $('#ip-quantity').val();
+    }
 </script>
 </body>
 </html>

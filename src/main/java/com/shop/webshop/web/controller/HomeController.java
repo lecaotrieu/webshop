@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -34,7 +35,11 @@ public class HomeController {
     }
 
     @GetMapping(value = "/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+        String referrer = request.getHeader("Referer");
+        if (referrer != null) {
+            request.getSession().setAttribute("url_prior_login", referrer);
+        }
         return "views/login";
     }
 

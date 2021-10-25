@@ -1,5 +1,6 @@
 package com.shop.webshop.core.service.impl;
 
+import com.shop.webshop.core.convert.CartProductConvert;
 import com.shop.webshop.core.dto.CartProductDTO;
 import com.shop.webshop.core.entity.CartEntity;
 import com.shop.webshop.core.entity.CartProductEntity;
@@ -29,22 +30,25 @@ public class CartProductService implements ICartProductService {
 
     @Transactional
     @Override
-    public Long addToCart(Long productId, Long cartId, Integer quantity, String username) throws Exception {
+    public CartProductDTO addToCart(Long productId, Long cartId, Integer quantity, String username, Integer cartStatus) throws Exception {
         CartProductEntity cartProductEntity = new CartProductEntity();
         CartEntity cartEntity = null;
         if (username != null) {
-            cartEntity = cartRepository.findAllByUser_userNameAndStatus(username, 1);
+            cartEntity = cartRepository.findAllByUser_userNameAndStatus(username, cartStatus);
         } else if (cartId != null) {
             cartEntity = cartRepository.getOne(cartId);
         }
         if (cartEntity == null) {
-            cartEntity = createNewCart(username);
+            cartEntity = createNewCart(username, cartStatus);
         }
-        boolean checkProductExist = true;
+        boolean checkProductExist = false;
         if (cartEntity.getCartProducts() != null) {
-            checkProductExist = cartEntity.getCartProducts().stream().filter(c -> c.getProduct().getId().equals(productId)).count() == 0;
+            checkProductExist = cartEntity.getCartProducts().stream().filter(c -> c.getProduct().getId().equals(productId)).count() > 0;
         }
-        if (checkProductExist) {
+        if (!checkProductExist) {
+            if (cartEntity.getStatus().equals(2) && cartEntity.getCartProducts() != null && cartEntity.getCartProducts().size() > 0) {
+                cartProductRepository.deleteById(cartEntity.getCartProducts().get(0).getId());
+            }
             cartProductEntity.setCart(cartEntity);
             cartProductEntity.setQuantity(quantity);
             ProductEntity productEntity = productRepository.findByIdAndStatus(productId, 1);
@@ -57,10 +61,11 @@ public class CartProductService implements ICartProductService {
             Long totalMoney = cartProductEntity.getProduct().getPrice() * (100 - (cartProductEntity.getProduct().getSale() == null ? 0 : cartProductEntity.getProduct().getSale())) / 100 * quantity;
             cartProductEntity.setTotalMoney(totalMoney);
         }
-        cartProductRepository.save(cartProductEntity);
-        return cartEntity.getId();
+        cartProductEntity = cartProductRepository.save(cartProductEntity);
+        return CartProductConvert.toDTO(cartProductEntity);
     }
 
+    @Transactional
     @Override
     public Long changeQuantity(CartProductDTO cartProduct) {
         CartProductEntity entity = cartProductRepository.getOne(cartProduct.getId());
@@ -80,16 +85,16 @@ public class CartProductService implements ICartProductService {
     @Autowired
     private UserRepository userRepository;
 
-    private CartEntity createNewCart(String username) {
+    @Transactional
+    private CartEntity createNewCart(String username, Integer status) {
         CartEntity cartEntity = new CartEntity();
         if (username != null) {
             UserEntity userEntity = userRepository.getById(username);
             cartEntity.setUser(userEntity);
             cartEntity.setCreatedBy(username);
         }
-        cartEntity.setStatus(1);
+        cartEntity.setStatus(status);
         cartEntity.setCreatedDate(Calendar.getInstance().getTime());
         return cartRepository.save(cartEntity);
-
     }
 }

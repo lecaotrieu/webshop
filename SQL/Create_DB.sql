@@ -57,9 +57,21 @@ CREATE TABLE cart(
 CREATE TABLE cartproduct(
                             id BIGINT NOT NULL PRIMARY KEY AUTO_iNCREMENT,
                             productId BIGINT,
-                            cartid bigint,
+                            cartid BIGINT,
                             quantity int,
-                            totalmoney DECIMAL(15,2),
+                            totalmoney BIGINT,
                             CONSTRAINT fk_cartproduct_product FOREIGN KEY (productId) REFERENCES product(productId),
                             CONSTRAINT fk_cartproduct_cart FOREIGN KEY (cartid) REFERENCES cart(cartid)
 );
+
+CREATE TABLE checkout(
+                         id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                         createddate DATETIME,
+                         address NVARCHAR(255),
+                         phone VARCHAR(11),
+                         money BIGINT NOT NULL ,
+                         cartid BIGINT NOT NULL UNIQUE,
+                         username VARCHAR(150),
+                         CONSTRAINT fk_checkout_cart FOREIGN KEY (cartid) REFERENCES cart(id),
+                         CONSTRAINT fk_checkout_user FOREIGN KEY (username) references user(username)
+)

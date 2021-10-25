@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:replace="~{layouts/web :: main-fragment (~{::title} ,~{::head}, ~{::body})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán</title>
+    <link rel="stylesheet" th:href="@{/template/plusminusbutton/style.css}">
+</head>
+<body>
+<div class="row">
+    <!--Grid column-->
+    <div class="col-lg-8">
+        <!-- Card -->
+        <div class="mb-3">
+            <div class="pt-4 wish-list">
+                <h5 class="mb-4">Cart (<span>2</span> Sản phẩm)</h5>
+                <div class="row mb-4" th:id="${'cartProduct-' + productDetail.id}">
+                    <div class="col-md-5 col-lg-3 col-xl-3">
+                        <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                            <img class="img-fluid w-100"
+                                 th:src="@{${productDetail.product.getImageUrl()}}" alt="Sample">
+                            <a th:href="@{'/product/detail/'+${productDetail.product.id}}">
+                                <div class="mask">
+                                    <img class="img-fluid w-100"
+                                         th:src="@{${productDetail.product.getImageUrl()}}">
+                                    <div class="mask rgba-black-slight"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-7 col-lg-9 col-xl-9">
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <a th:href="@{'/product/detail/'+${productDetail.product.id}}">
+                                        <h5 th:text="${productDetail.product.productName}"></h5>
+                                    </a>
+                                    <p class="mb-3 text-muted text-uppercase small"
+                                       th:text="${'Giá: '+ productDetail.product.price} + ' vnđ'"></p>
+                                    <p class="mb-3 text-muted text-uppercase small"
+                                       th:text="${'Giảm giá: '+ productDetail.product.sale +' %'}"></p>
+                                    <p class="mb-3 text-muted text-uppercase small"
+                                       th:text="${'Giá đã giảm: '+ productDetail.product.saleOf + ' vnđ'}"></p>
+                                    <p class="mb-3 text-muted text-uppercase small"
+                                       th:text="${'SHOP: '+ productDetail.product.store}"></p>
+                                </div>
+                                <div>
+                                    <div class="quantity buttons_added">
+                                        <input type="button" value="-" class="minus">
+                                        <input type="number" step="1" min="1" max="" name="quantity"
+                                               th:onchange="changQuantity([[${productDetail.id}]], [[${productDetail.product.saleOf}]])"
+                                               th:value="${productDetail.quantity}" title="Qty"
+                                               class="input-text qty text" size="4" pattern="" inputmode=""
+                                               th:id="${'ip-quantity-' + productDetail.id}">
+                                        <input type="button" value="+" class="plus">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    Tổng giá:
+                                </div>
+                                <p class="mb-0"><span><strong class="product-total-money"
+                                                              th:id="${'product-total-money-' + productDetail.id}"
+                                                              th:text="${productDetail.product.saleOf * productDetail.quantity}"></strong> vnđ</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="mb-4">
+            </div>
+        </div>
+        <!-- Card -->
+    </div>
+    <!--Grid column-->
+    <!--Grid column-->
+    <div class="col-lg-4">
+        <!-- Card -->
+        <div class="mb-3">
+            <div class="pt-4">
+                <h5 class="mb-3">Tổng giá sản phẩm</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                        <div>
+                            <strong>Tổng giá</strong>
+                            <strong>
+                                <p class="mb-0"></p>
+                            </strong>
+                        </div>
+                        <span><strong id="total-money">0 </strong> vnđ</span>
+                    </li>
+                </ul>
+                <form sec:authorize="hasRole('USER')" id="form-checkout">
+                    <div class="form-group">
+                        <label for="ip-address">Địa chỉ</label>
+                        <input type="text" class="form-control" id="ip-address" placeholder="Nhập địa chỉ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ip-phone">Số điện thoại</label>
+                        <input type="number" class="form-control" id="ip-phone" placeholder="Số điện thoại" required>
+                    </div>
+                    <input type="hidden" id="ip-cartId" th:field="${productDetail.cart.id}">
+                    <button type="submit" class="btn btn-primary">Thanh toán</button>
+                </form>
+                <button class="btn btn-primary" sec:authorize="!hasRole('USER')">Thanh toán</button>
+            </div>
+        </div>
+        <!-- Card -->
+    </div>
+    <!--Grid column-->
+</div>
+<script th:src="@{/template/web/js/checkout.js}"></script>
+<script>
+    $(document).ready(function () {
+        setTotalMoney();
+    });
+
+    function setTotalMoney() {
+        var totalMoney = 0;
+        $('.product-total-money').each(function (index) {
+            totalMoney = totalMoney + Number($(this).text());
+        });
+        $('#total-money').text(totalMoney);
+    }
+
+    function changQuantity(id, saleOf) {
+        var quantity = $('#ip-quantity-' + id).val();
+        var money = Number(saleOf) * Number(quantity);
+        $('#product-total-money-' + id).text(money);
+        setTotalMoney();
+        var url = "/cartProduct/edit/quantity";
+        var data = {id: id, quantity: quantity, totalMoney: money};
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (re) {
+            },
+            error: function (re) {
+                showAlertAfterError("Update thất bại !")
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

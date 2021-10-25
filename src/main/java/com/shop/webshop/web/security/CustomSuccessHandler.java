@@ -15,6 +15,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Component
@@ -35,7 +36,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             cookie.setMaxAge(0);
             response.addCookie(cookie);
         }
-        String targetUrl = determineTargetUrl(authentication);
+        HttpSession session = request.getSession();
+        String targetUrl = "/";
+        String redirectUrl = (String) session.getAttribute("url_prior_login");
+        if (redirectUrl != null) {
+            session.removeAttribute("url_prior_login");
+            targetUrl = redirectUrl;
+        }
+        String urlAdminHome = determineTargetUrl(authentication);
+        if (urlAdminHome != null) targetUrl = urlAdminHome;
         if (response.isCommitted()) {
             return;
         }
@@ -43,7 +52,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private String determineTargetUrl(Authentication authentication) {
-        String url = "/home-page";
+        String url = null;
         if (SecurityUtils.getUserAuthorities().contains(CoreConstant.ROLE_ADMIN)) {
             url = "/admin/home-page";
         }

@@ -10,7 +10,6 @@ import com.shop.webshop.core.entity.CartProductEntity;
 import com.shop.webshop.core.entity.UserEntity;
 import com.shop.webshop.core.repository.CartProductRepository;
 import com.shop.webshop.core.repository.CartRepository;
-import com.shop.webshop.core.repository.UserRepository;
 import com.shop.webshop.core.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,19 +24,17 @@ public class CartService implements ICartService {
     @Autowired
     private CartRepository cartRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
     public CartDTO findById(Long id) {
         CartEntity cartEntity = cartRepository.getOne(id);
+        if (cartEntity == null) return null;
         CartDTO cartDTO = CartConvert.toDTO(cartEntity);
         List<CartProductDTO> cartProductS = new ArrayList<>();
         cartEntity.getCartProducts().forEach(c -> {
             CartProductDTO cartProductDTO = CartProductConvert.toDTO(c);
             cartProductS.add(cartProductDTO);
         });
-        cartDTO.setCartId(id);
+        cartDTO.setId(id);
         cartDTO.setCartProducts(cartProductS);
         return cartDTO;
     }
@@ -45,6 +42,7 @@ public class CartService implements ICartService {
     @Override
     public CartDTO findByUsername(String username) {
         CartEntity cartEntity = cartRepository.findAllByUser_userNameAndStatus(username, CoreConstant.ACTIVE_STATUS);
+        if (cartEntity == null) return null;
         CartDTO cartDTO = CartConvert.toDTO(cartEntity);
         List<CartProductDTO> cartProductS = new ArrayList<>();
         cartEntity.getCartProducts().forEach(c -> {
@@ -63,25 +61,39 @@ public class CartService implements ICartService {
     public Long addUserToCart(Long id, String username) throws IOException {
         CartEntity oldCart = cartRepository.findAllByUser_userNameAndStatus(username, 1);
         CartEntity newCart = cartRepository.getOne(id);
-        if (oldCart != null && oldCart.getCartProducts().size() > 0) {
+        newCart = mergeCart(oldCart, newCart);
+        return cartRepository.save(newCart).getId();
+    }
+
+    private CartEntity mergeCart(CartEntity source, CartEntity target) {
+        if (source != null && source.getCartProducts().size() > 0) {
             // add product not exist
-            for (CartProductEntity entity : oldCart.getCartProducts()) {
+            for (CartProductEntity entity : source.getCartProducts()) {
                 //check contains
-                boolean check = newCart.getCartProducts().stream()
+                boolean check = target.getCartProducts().stream()
                         .filter(c -> c.getProduct().getId().equals(entity.getProduct().getId()))
                         .findFirst().isPresent();
                 if (!check) {
-                    entity.setCart(newCart);
+                    entity.setCart(target);
                     cartProductRepository.save(entity);
                 } else {
                     cartProductRepository.delete(entity);
                 }
             }
         }
-        oldCart.setStatus(0);
-        cartRepository.save(oldCart);
-        newCart.setUser(new UserEntity());
-        newCart.getUser().setUserName(username);
-        return cartRepository.save(newCart).getId();
+        source.setStatus(0);
+        cartRepository.save(source);
+        String username = null;
+        if (source.getUser() != null && source.getUser().getUserName() != null) {
+            username = source.getUser().getUserName();
+        } else if (target.getUser() != null && target.getUser().getUserName() != null) {
+            username = target.getUser().getUserName();
+        }
+        if (username != null) {
+            target.setUser(new UserEntity());
+            target.getUser().setUserName(username);
+        }
+        cartRepository.delete(source);
+        return target;
     }
 }

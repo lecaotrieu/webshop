@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 public class CartProductConvert {
     public static CartProductDTO toDTO(CartProductEntity entity) {
+        if (entity == null) return null;
         CartProductDTO dto = new CartProductDTO();
         BeanUtils.copyProperties(entity, dto);
         if (entity.getProduct() != null) {
@@ -18,6 +19,7 @@ public class CartProductConvert {
     }
 
     public static CartProductEntity toEntity(CartProductDTO dto) {
+        if (dto == null) return null;
         CartProductEntity entity = new CartProductEntity();
         BeanUtils.copyProperties(dto, entity);
         if (dto.getProduct() != null) {

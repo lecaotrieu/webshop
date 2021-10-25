@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,6 +78,7 @@ public class ProductService implements IProductService {
     @Autowired
     private StringGlobalUtils stringGlobalUtils;
 
+    @Transactional
     @Override
     public Long saveProduct(ProductDTO productDTO) throws Exception {
         ProductEntity productEntity = new ProductEntity();
@@ -99,6 +101,7 @@ public class ProductService implements IProductService {
         return productEntity.getId();
     }
 
+    @Transactional
     @Override
     public void updateImage(Long id, String image) throws Exception {
         ProductEntity productEntity = productRepository.getOne(id);
@@ -106,6 +109,7 @@ public class ProductService implements IProductService {
         productRepository.save(productEntity);
     }
 
+    @Transactional
     @Override
     public void deleteProduct(Long id) throws Exception {
         ProductEntity productEntity = new ProductEntity();
@@ -113,6 +117,7 @@ public class ProductService implements IProductService {
         productRepository.delete(productEntity);
     }
 
+    @Transactional
     @Override
     public void updateStatus(Long id, Integer status) {
         ProductEntity productEntity = productRepository.getOne(id);

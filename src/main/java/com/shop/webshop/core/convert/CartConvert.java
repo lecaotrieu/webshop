@@ -6,6 +6,8 @@ import org.springframework.beans.BeanUtils;
 
 public class CartConvert {
     public static CartDTO toDTO(CartEntity entity) {
+        if (entity == null)
+            return null;
         CartDTO dto = new CartDTO();
         BeanUtils.copyProperties(entity, dto);
         if (entity.getUser() != null)
@@ -14,6 +16,8 @@ public class CartConvert {
     }
 
     public static CartEntity toEntity(CartDTO dto) {
+        if (dto == null)
+            return null;
         CartEntity entity = new CartEntity();
         BeanUtils.copyProperties(dto, entity);
         if (dto.getUser() != null)

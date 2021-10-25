@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 public class ProductConvert {
     public static ProductDTO toDTO(ProductEntity entity) {
+        if (entity == null) return null;
         ProductDTO dto = new ProductDTO();
         BeanUtils.copyProperties(entity, dto);
         if (dto.getImage() == null) {
@@ -18,6 +19,7 @@ public class ProductConvert {
     }
 
     public static ProductEntity toEntity(ProductDTO dto) {
+        if (dto == null) return null;
         ProductEntity entity = new ProductEntity();
         BeanUtils.copyProperties(dto, entity);
         return entity;

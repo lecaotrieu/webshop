@@ -23,9 +23,9 @@ public class CartProductApi {
             username = SecurityUtils.getPrincipal().getUsername();
         }
         if (quantity == null) quantity = 1;
-        cartId = cartProductService.addToCart(productId, cartId, quantity, username);
+        CartProductDTO cartProduct =  cartProductService.addToCart(productId, cartId, quantity, username, CoreConstant.ACTIVE_STATUS);
         if (!SecurityUtils.getUserAuthorities().contains(CoreConstant.ROLE_USER)) {
-            Cookie cookie = new Cookie("cartId", cartId.toString());
+            Cookie cookie = new Cookie("cartId", cartProduct.getCart().getId().toString());
             response.addCookie(cookie);
         }
     }

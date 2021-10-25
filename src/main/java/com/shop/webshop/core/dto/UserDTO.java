@@ -17,6 +17,7 @@ public class UserDTO {
     private String confirmPassword;
     private RoleDTO role;
     private List<CartDTO> carts;
+    private List<CheckoutDTO> checkouts;
 
     public UserDTO() {
     }
@@ -123,5 +124,13 @@ public class UserDTO {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public List<CheckoutDTO> getCheckouts() {
+        return checkouts;
+    }
+
+    public void setCheckouts(List<CheckoutDTO> checkouts) {
+        this.checkouts = checkouts;
     }
 }

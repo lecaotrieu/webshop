@@ -12,7 +12,7 @@
 <!--Section: Block Content-->
 <section>
     <!--Grid row-->
-    <div class="row" th:if="${cart == null}" style="margin-top: 00px;">
+    <div class="row" th:if="${cart == null || cart.getCartProducts().size==0}" style="margin-top: 00px;">
         <div class="col-12">
             <h5 style="text-align: center">Không có sản phẩm trong giỏ hàng</h5>
         </div>
@@ -20,15 +20,15 @@
             <a th:href="@{/home-page}" class="btn btn-primary" style="display: block">Về trang chủ</a>
         </div>
     </div>
-    <div class="row" th:if="${cart != null}">
+    <div class="row" th:if="${cart != null && cart.getCartProducts().size>0}">
         <!--Grid column-->
         <div class="col-lg-8">
             <!-- Card -->
             <div class="mb-3">
                 <div class="pt-4 wish-list">
-                    <h5 class="mb-4">Cart (<span>2</span> Sản phẩm)</h5>
-                    <th:block th:each="productDetail: ${cart.cartProducts}">
-                        <div class="row mb-4" th:id="${'cartProduct-' + productDetail.id}">
+                    <h5 class="mb-4">Cart Sản phẩm</h5>
+                    <div th:each="productDetail: ${cart.cartProducts}" th:id="${'cartProduct-' + productDetail.id}">
+                        <div class="row mb-4">
                             <div class="col-md-5 col-lg-3 col-xl-3">
                                 <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
                                     <img class="img-fluid w-100"
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <hr class="mb-4">
-                    </th:block>
+                    </div>
                 </div>
             </div>
             <!-- Card -->
@@ -110,7 +110,20 @@
                             <span><strong id="total-money">0 </strong> vnđ</span>
                         </li>
                     </ul>
-                    <button type="button" class="btn btn-primary btn-block">go to checkout</button>
+                    <form sec:authorize="hasRole('USER')" id="form-checkout">
+                        <div class="form-group">
+                            <label for="ip-address">Địa chỉ</label>
+                            <input type="text" class="form-control" id="ip-address" placeholder="Nhập địa chỉ" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ip-phone">Số điện thoại</label>
+                            <input type="number" class="form-control" id="ip-phone" placeholder="Số điện thoại"
+                                   required>
+                        </div>
+                        <input type="hidden" id="ip-cartId" th:field="${cart.id}">
+                        <button type="submit" class="btn btn-primary">Thanh toán</button>
+                    </form>
+                    <a th:href="@{/login}" class="btn btn-primary" sec:authorize="!hasRole('USER')">Thanh toán</a>
                 </div>
             </div>
             <!-- Card -->
@@ -120,6 +133,7 @@
     <!-- Grid row -->
 </section>
 <!--Section: Block Content-->
+<script th:src="@{/template/web/js/checkout.js}"></script>
 <script>
     $(document).ready(function () {
         setTotalMoney();
@@ -161,6 +175,7 @@
             contentType: 'application/json',
             success: function (re) {
                 $('#cartProduct-' + id).remove();
+                setTotalMoney();
             },
             error: function (re) {
                 alert("Xóa thất bại !")
