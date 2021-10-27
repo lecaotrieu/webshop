@@ -9,6 +9,6 @@ public interface ICartService {
 
     CartDTO findByUsername(String username);
 
-    Long addUserToCart(Long id, String username) throws IOException;
+    void addUserToCart(Long id, String username) throws IOException;
 
 }

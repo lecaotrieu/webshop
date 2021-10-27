@@ -58,42 +58,44 @@ public class CartService implements ICartService {
 
     @Transactional
     @Override
-    public Long addUserToCart(Long id, String username) throws IOException {
+    public void addUserToCart(Long id, String username) throws IOException {
         CartEntity oldCart = cartRepository.findAllByUser_userNameAndStatus(username, 1);
         CartEntity newCart = cartRepository.getOne(id);
-        newCart = mergeCart(oldCart, newCart);
-        return cartRepository.save(newCart).getId();
+        if (oldCart != null || newCart != null) {
+            mergeCart(oldCart, newCart, username);
+        }
     }
 
-    private CartEntity mergeCart(CartEntity source, CartEntity target) {
-        if (source != null && source.getCartProducts().size() > 0) {
-            // add product not exist
-            for (CartProductEntity entity : source.getCartProducts()) {
-                //check contains
-                boolean check = target.getCartProducts().stream()
-                        .filter(c -> c.getProduct().getId().equals(entity.getProduct().getId()))
-                        .findFirst().isPresent();
-                if (!check) {
-                    entity.setCart(target);
-                    cartProductRepository.save(entity);
-                } else {
-                    cartProductRepository.delete(entity);
+    private void mergeCart(CartEntity source, CartEntity target, String username) {
+        if (target != null) {
+            if (source != null) {
+                if (source.getCartProducts().size() > 0) {
+                    if (source.getUser() != null && source.getUser().getUserName() != null) {
+                        username = source.getUser().getUserName();
+                    }
+                    // add product not exist
+                    for (CartProductEntity entity : source.getCartProducts()) {
+                        //check contains
+                        boolean check = target.getCartProducts().stream()
+                                .filter(c -> c.getProduct().getId().equals(entity.getProduct().getId()))
+                                .findFirst().isPresent();
+                        if (!check) {
+                            entity.setCart(target);
+                            cartProductRepository.save(entity);
+                        } else {
+                            cartProductRepository.delete(entity);
+                        }
+                    }
+                    source.setStatus(0);
+                    cartRepository.save(source);
+                    cartRepository.delete(source);
                 }
             }
+            if (username != null) {
+                target.setUser(new UserEntity());
+                target.getUser().setUserName(username);
+            }
+            cartRepository.save(target);
         }
-        source.setStatus(0);
-        cartRepository.save(source);
-        String username = null;
-        if (source.getUser() != null && source.getUser().getUserName() != null) {
-            username = source.getUser().getUserName();
-        } else if (target.getUser() != null && target.getUser().getUserName() != null) {
-            username = target.getUser().getUserName();
-        }
-        if (username != null) {
-            target.setUser(new UserEntity());
-            target.getUser().setUserName(username);
-        }
-        cartRepository.delete(source);
-        return target;
     }
 }
