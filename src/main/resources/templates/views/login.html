@@ -11,8 +11,20 @@
 <div class="row">
     <div class="form-login col-6 mx-auto">
         <h3 style="text-align: center">Đăng nhập</h3>
-        <div class="alert alert-danger" role="alert" th:if="${param.register_success != null}">
+        <div class="alert alert-success" role="alert" th:if="${param.register_success != null}">
             Đăng ký tài khoản thành công !
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${param.incorrect_account != null}">
+            Sai tài khoản hoặc mật khẩu !
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${param.accessDenied != null}" sec:authorize="hasRole('ADMIN')">
+            Bạn cần đăng nhập bằng tài khoản khách hàng để mua hàng !
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${param.accessDenied != null}" sec:authorize="hasRole('USER')">
+            Từ chối try cập !
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${param.invalid_session != null}">
+            Invalid session !
         </div>
         <form th:action="@{/login}" method="post">
             <div class="form-group">

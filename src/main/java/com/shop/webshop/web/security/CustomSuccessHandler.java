@@ -27,14 +27,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        if (WebUtils.getCookie(request, "cartId") != null) {
-            String cookieCartId = WebUtils.getCookie(request, "cartId").getValue();
-            Long cartId = Long.parseLong(cookieCartId);
-            cartService.addUserToCart(cartId, SecurityUtils.getPrincipal().getUsername());
-            // remove cookie cart
-            Cookie cookie = new Cookie("cartId", "");
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
+        if (SecurityUtils.getUserAuthorities().contains(CoreConstant.ROLE_USER)) {
+            if (WebUtils.getCookie(request, "cartId") != null) {
+                String cookieCartId = WebUtils.getCookie(request, "cartId").getValue();
+                Long cartId = Long.parseLong(cookieCartId);
+                cartService.addUserToCart(cartId, SecurityUtils.getPrincipal().getUsername());
+                // remove cookie cart
+                Cookie cookie = new Cookie("cartId", "");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
         }
         HttpSession session = request.getSession();
         String targetUrl = "/";

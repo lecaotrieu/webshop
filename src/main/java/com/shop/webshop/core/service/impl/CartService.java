@@ -86,10 +86,10 @@ public class CartService implements ICartService {
                             cartProductRepository.delete(entity);
                         }
                     }
-                    source.setStatus(0);
-                    cartRepository.save(source);
-                    cartRepository.delete(source);
                 }
+                source.setStatus(0);
+                cartRepository.save(source);
+                cartRepository.delete(source);
             }
             if (username != null) {
                 target.setUser(new UserEntity());
