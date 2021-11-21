@@ -35,12 +35,11 @@ public class UserService implements IUserService {
         roleEntity.setRoleCode("USER");
         userEntity.setRole(roleEntity);
         userEntity.setStatus(CoreConstant.ACTIVE_STATUS);
-        userEntity.setCreatedDate(Calendar.getInstance().getTime());
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userRepository.save(userEntity);
     }
 
-    private boolean checkUser(UserDTO userDTO) throws Exception{
+    private boolean checkUser(UserDTO userDTO) throws Exception {
         String userName = userDTO.getUserName();
         String email = userDTO.getEmail();
         boolean valid = (userName != null) && userName.matches("^[a-zA-Z][a-zA-Z0-9-_\\.]{4,40}$");

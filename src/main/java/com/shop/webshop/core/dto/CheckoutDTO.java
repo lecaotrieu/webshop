@@ -1,31 +1,11 @@
 package com.shop.webshop.core.dto;
 
-import java.util.Date;
-
-public class CheckoutDTO {
-    private Long id;
-    private Date createdDate;
+public class CheckoutDTO extends AbstractDTO{
     private String address;
     private String phone;
     private Long money;
     private UserDTO user;
     private CartDTO cart;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
 
     public String getAddress() {
         return address;

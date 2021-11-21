@@ -36,7 +36,6 @@ public class CheckoutService implements ICheckoutService {
         CartEntity cart = cartRepository.getById(checkout.getCart().getId());
         Long totalMoney = cart.getCartProducts().stream().mapToLong(c -> c.getTotalMoney()).sum();
         CheckoutEntity entity = CheckoutConvert.toEntity(checkout);
-        entity.setCreatedDate(Calendar.getInstance().getTime());
         entity.setMoney(totalMoney);
         checkoutRepository.save(entity);
         cart.setStatus(0);

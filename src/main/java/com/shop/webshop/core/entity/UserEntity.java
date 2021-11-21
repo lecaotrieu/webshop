@@ -6,8 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class UserEntity {
-    @Id
+public class UserEntity extends BaseEntity {
     @Column(name = "username")
     private String userName;
 
@@ -22,18 +21,6 @@ public class UserEntity {
 
     @Column
     private String phone;
-
-    @Column(name = "createddate")
-    private Date createdDate;
-
-    @Column(name = "createdby")
-    private String createdBy;
-
-    @Column(name = "modifieddate")
-    private Date modifiedDate;
-
-    @Column(name = "modifiedby")
-    private String modifiedBy;
 
     @Column
     private Integer status;
@@ -62,38 +49,6 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
     }
 
     public Integer getStatus() {

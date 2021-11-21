@@ -1,8 +1,11 @@
 package com.shop.webshop.core.service.impl;
 
 import com.shop.webshop.core.constant.CoreConstant;
+import com.shop.webshop.core.convert.CategoryConvert;
 import com.shop.webshop.core.convert.ProductConvert;
+import com.shop.webshop.core.dto.CategoryDTO;
 import com.shop.webshop.core.dto.ProductDTO;
+import com.shop.webshop.core.entity.CategoryEntity;
 import com.shop.webshop.core.entity.ProductEntity;
 import com.shop.webshop.core.repository.ProductRepository;
 import com.shop.webshop.core.service.IProductService;
@@ -86,17 +89,14 @@ public class ProductService implements IProductService {
             productEntity = productRepository.getOne(productDTO.getId());
         }
         BeanUtils.copyProperties(productDTO, productEntity);
-        if (productEntity.getId() == null) {
-            productEntity.setCreatedDate(Calendar.getInstance().getTime());
-            productEntity.setCreatedBy(SecurityUtils.getPrincipal().getUsername());
-        } else {
-            productEntity.setModifiedDate(Calendar.getInstance().getTime());
-            productEntity.setModifiedBy(SecurityUtils.getPrincipal().getUsername());
-            productEntity.setStatus(CoreConstant.ACTIVE_STATUS);
-        }
         if (productEntity.getSale() == null) productEntity.setSale(0);
-        productEntity.setStatus(productDTO.getStatus());
+        productEntity.setStatus(productDTO.getStatus() == null ? 0 : productDTO.getStatus());
         productEntity.setProductCode(stringGlobalUtils.covertToString(productEntity.getProductName()));
+        List<CategoryEntity> categoryEntities = new ArrayList<>();
+        for (CategoryDTO categoryDTO: productDTO.getCategories()) {
+            categoryEntities.add(CategoryConvert.toEntity(categoryDTO));
+        }
+        productEntity.setCategories(categoryEntities);
         productEntity = productRepository.save(productEntity);
         return productEntity.getId();
     }

@@ -3,18 +3,11 @@ package com.shop.webshop.core.dto;
 import com.shop.webshop.core.constant.CoreConstant;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
-public class ProductDTO {
-    private Long id;
+public class ProductDTO extends AbstractDTO<ProductDTO>{
     private String productCode;
     private String productName;
-    private Date createdDate;
-    private String createdBy;
-    private Date modifiedDate;
-    private String modifiedBy;
     private Long price;
     private Integer sale;
     private Long saleOf;
@@ -25,7 +18,7 @@ public class ProductDTO {
     private String store;
     private Integer status;
     private List<CartProductDTO> cartProducts;
-
+    private List<CategoryDTO> categories;
     public ProductDTO() {
     }
 
@@ -33,7 +26,7 @@ public class ProductDTO {
         if (image == null) {
             imageUrl = "/template/image/no-image.png";
         } else {
-            imageUrl = "/" + CoreConstant.FOLDER_UPLOAD + "/" + CoreConstant.PRODUCT_IMAGE + "/" + id + "/" + image;
+            imageUrl = "/" + CoreConstant.FOLDER_UPLOAD + "/" + CoreConstant.PRODUCT_IMAGE + "/" + getId() + "/" + image;
         }
         return imageUrl;
     }
@@ -56,38 +49,6 @@ public class ProductDTO {
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
     }
 
     public Integer getSale() {
@@ -130,14 +91,6 @@ public class ProductDTO {
         this.cartProducts = cartProducts;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -172,5 +125,13 @@ public class ProductDTO {
 
     public void setSaleOf(Long saleOf) {
         this.saleOf = saleOf;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CategoryDTO> categories) {
+        this.categories = categories;
     }
 }

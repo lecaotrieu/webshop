@@ -5,13 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "checkout")
-public class CheckoutEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "createddate")
-    private Date createdDate;
+public class CheckoutEntity extends BaseEntity {
 
     @Column
     private String address;
@@ -29,22 +23,6 @@ public class CheckoutEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cartid")
     private CartEntity cart;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
 
     public String getAddress() {
         return address;

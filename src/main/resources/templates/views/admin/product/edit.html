@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit phẩm</title>
+    <script th:src="@{/template/ckeditor/ckeditor.js}"></script>
 </head>
 <body>
 <div class="breadcrumbs" id="breadcrumbs">
@@ -65,9 +66,22 @@
             </select>
         </div>
         <div class="form-group">
+            <label class="form-control-label" th:text="#{label.category}">
+            </label>
+            <div class="form-control col-12">
+                <div class="custom-control custom-checkbox float-left" th:each="category, stat: ${categories}"
+                     style="width:120px; margin-right: 15px;">
+                    <input type="checkbox" class="custom-control-input" th:name="'categories['+ ${stat.index} +'].id'"
+                           th:value="${category.id}"
+                           th:id="checkbox_+${category.id}" th:checked="${category.checked}">
+                    <label class="custom-control-label"
+                           th:for="checkbox_+${category.id}" th:text="${category.categoryName}"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <label for="ip-description">Miêu tả</label>
-            <textarea class="form-control" id="ip-description" th:field="${product.description}" rows="5">
-
+            <textarea class="form-control col-12" id="ip-description" th:field="${product.description}" rows="5">
             </textarea>
         </div>
         <input type="hidden" th:field="${product.id}">
@@ -77,11 +91,20 @@
                onchange="readURL(this,'image-product')">
         <img class="d-block product-image" th:src="${product.imageUrl}" alt="Card image cap" id="image-product"
              th:if="${product.id !=null}">
-        <img class="d-block product-image" th:src="@{/template/image/no-image.png}" alt="Card image cap" id="image-product"
+        <img class="d-block product-image" th:src="@{/template/image/no-image.png}" alt="Card image cap"
+             id="image-product"
              th:if="${product.id ==null}">
     </div>
     <input type="hidden" th:field="${product.image}">
     <button type="submit" class="btn btn-primary" id="btn-submit">Đăng</button>
 </form>
+<script>
+    $(document).ready(function () {
+        var editor = CKEDITOR.replace('ip-description', {
+            width: ['100%'], height: ['300px']
+        });
+    });
+    $("input[name='categories']").attr("name", "categories.id");
+</script>
 </body>
 </html>

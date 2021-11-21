@@ -6,7 +6,6 @@
 <head>
     <title th:replace="${title}"></title>
     <link rel="stylesheet" th:href="@{/template/bootstrap-4/css/bootstrap.min.css}">
-    <div th:replace="${head}"></div>
     <link rel="stylesheet" th:href="@{/template/fontawesome-5.12.1/css/fontawesome.min.css}">
     <link rel="stylesheet" th:href="@{/template/fontawesome-5.12.1/css/all.css}">
     <link rel="stylesheet" th:href="@{/template/mdbootstrap/css/mdb.min.css}">
@@ -17,9 +16,10 @@
     <script type="text/javascript" th:src="@{/template/mdbootstrap/js/popper.min.js}"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" th:src="@{/template/mdbootstrap/js/mdb.min.js}"></script>
+    <div th:replace="${head}"></div>
     <style>
         .menu {
-            height: 100vh;
+            height: 100%;
             background: #211d1d;
             color: #fff;
             padding: 16px;
@@ -45,6 +45,9 @@
                     <h4>Quản lý</h4>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/admin/product/list}">Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/category/list}" th:text="#{label.category.list}"></a>
                     </li>
                 </ul>
             </div>

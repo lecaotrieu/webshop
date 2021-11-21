@@ -1,18 +1,13 @@
 package com.shop.webshop.core.dto;
 
-import java.util.Date;
 import java.util.List;
 
-public class UserDTO {
+public class UserDTO extends AbstractDTO<UserDTO> {
     private String userName;
     private String password;
     private String fullName;
     private String email;
     private String phone;
-    private Date createdDate;
-    private String createdBy;
-    private Date modifiedDate;
-    private String modifiedBy;
     private Integer status;
     private String confirmPassword;
     private RoleDTO role;
@@ -36,38 +31,6 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
     }
 
     public Integer getStatus() {

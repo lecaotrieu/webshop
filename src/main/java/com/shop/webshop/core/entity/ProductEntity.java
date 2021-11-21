@@ -6,28 +6,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "product")
-public class ProductEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ProductEntity extends BaseEntity{
     @Column(name = "productcode")
     private String productCode;
 
     @Column(name = "productname")
     private String productName;
-
-    @Column(name = "createddate")
-    private Date createdDate;
-
-    @Column(name = "createdby")
-    private String createdBy;
-
-    @Column(name = "modifieddate")
-    private Date modifiedDate;
-
-    @Column(name = "modifiedby")
-    private String modifiedBy;
 
     @Column
     private Long price;
@@ -50,6 +34,11 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<CartProductEntity> cartProducts;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<CategoryEntity> categories;
+
     public String getProductCode() {
         return productCode;
     }
@@ -64,30 +53,6 @@ public class ProductEntity {
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
     }
 
     public Long getPrice() {
@@ -138,14 +103,6 @@ public class ProductEntity {
         this.cartProducts = cartProducts;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -154,11 +111,11 @@ public class ProductEntity {
         this.status = status;
     }
 
-    public Date getModifiedDate() {
-        return modifiedDate;
+    public List<CategoryEntity> getCategories() {
+        return categories;
     }
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
+    public void setCategories(List<CategoryEntity> categories) {
+        this.categories = categories;
     }
 }

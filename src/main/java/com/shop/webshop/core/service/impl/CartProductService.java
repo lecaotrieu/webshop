@@ -85,16 +85,13 @@ public class CartProductService implements ICartProductService {
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional
     private CartEntity createNewCart(String username, Integer status) {
         CartEntity cartEntity = new CartEntity();
         if (username != null) {
-            UserEntity userEntity = userRepository.getById(username);
+            UserEntity userEntity = userRepository.findByUserName(username);
             cartEntity.setUser(userEntity);
-            cartEntity.setCreatedBy(username);
         }
         cartEntity.setStatus(status);
-        cartEntity.setCreatedDate(Calendar.getInstance().getTime());
         return cartRepository.save(cartEntity);
     }
 }
